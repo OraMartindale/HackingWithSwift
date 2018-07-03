@@ -12,18 +12,26 @@ import UIKit
 class ViewController: UITableViewController {
     var allWords = [String]()
     var usedWords = [String]()
+    var wordIndex = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForAnswer))
+        loadDefaultWords()
+        startGame()
+    }
+    
+    func loadDefaultWords() {
         if let startWordsPath = Bundle.main.path(forResource: "start", ofType: "txt") {
             if let startWords = try? String(contentsOfFile: startWordsPath) {
                 allWords = startWords.components(separatedBy: "\n")
+            } else {
+                allWords = ["silkworms"]
             }
         } else {
             allWords = ["silkworm"]
         }
-        startGame()
+        allWords = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: allWords) as! [String]
     }
     
     @objc func promptForAnswer() {
@@ -42,36 +50,41 @@ class ViewController: UITableViewController {
     func submit(answer: String) {
         let lowerAnswer = answer.lowercased()
         
-        let errorTitle: String
-        let errorMessage: String
-        
-        if isAnagram(word: lowerAnswer) {
-            if isNotAlreadyUsed(word: lowerAnswer) {
-                if isWord(word: lowerAnswer) {
-                    usedWords.insert(answer, at: 0)
-                    
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    tableView.insertRows(at: [indexPath], with: .automatic)
-                    
-                    return
-                } else {
-                    errorTitle = "Word not recognized"
-                    errorMessage = "You can't just make them up, you know!"
-                }
-            } else {
-                errorTitle = "Word used already"
-                errorMessage = "Be more original!"
-            }
-        } else {
-            errorTitle = "Word not possible"
-            errorMessage = "You can't spell that word from '\(title!.lowercased())'!"
+        if isWordSameAsTitle(word: lowerAnswer) {
+            showErrorMessage(title: "Word not allowed", message: "You can't use the word itself as an answer.")
+            return
         }
-        
-        let ac = UIAlertController(title: errorTitle, message: errorMessage, preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
+        if !isLongEnough(word: lowerAnswer) {
+            showErrorMessage(title: "Word too short", message: "Must be at least 3 letters.")
+            return
+        }
+        if !isAnagram(word: lowerAnswer) {
+            showErrorMessage(title: "Word not possible", message: "You can't spell that word from '\(title!.lowercased())'!")
+            return
+        }
+        if !isNotAlreadyUsed(word: lowerAnswer) {
+            showErrorMessage(title: "Word used already", message: "Be more original!")
+            return
+        }
+        if !isWord(word: lowerAnswer) {
+            showErrorMessage(title: "Word not recognized", message: "You can't just make them up, you know!")
+            return
+        }
+
+        usedWords.insert(answer, at: 0)
+        let indexPath = IndexPath(row: 0, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
 
+    func isWordSameAsTitle(word: String) -> Bool {
+        return word == title
+    }
+    
+    func isLongEnough(word: String) -> Bool {
+        let range = NSMakeRange(0, word.utf16.count)
+        return range.length >= 3
+    }
+    
     func isAnagram(word: String) -> Bool {
         var tempWord = title!.lowercased()
         
@@ -96,9 +109,15 @@ class ViewController: UITableViewController {
         return misspelledRange.location == NSNotFound
     }
 
+    func showErrorMessage(title: String, message: String) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+    }
+
     func startGame() {
-        allWords = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: allWords) as! [String]
-        title = allWords[0]
+        title = allWords[wordIndex]
+        wordIndex += 1
         usedWords.removeAll(keepingCapacity: true)
         tableView.reloadData()
     }
