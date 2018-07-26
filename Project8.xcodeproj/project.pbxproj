@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2437FE6F2109527F00620321 /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2437FE6E2109527F00620321 /* level1.txt */; };
 		245A5FD22102E22D008FA7D2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A5FD12102E22D008FA7D2 /* AppDelegate.swift */; };
 		245A5FD42102E22D008FA7D2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245A5FD32102E22D008FA7D2 /* ViewController.swift */; };
 		245A5FD72102E22D008FA7D2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 245A5FD52102E22D008FA7D2 /* Main.storyboard */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2437FE6E2109527F00620321 /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = level1.txt; path = "OriginalProject/project8-files/level1.txt"; sourceTree = SOURCE_ROOT; };
 		245A5FCE2102E22D008FA7D2 /* Project8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		245A5FD12102E22D008FA7D2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		245A5FD32102E22D008FA7D2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 				245A5FD12102E22D008FA7D2 /* AppDelegate.swift */,
 				245A5FD32102E22D008FA7D2 /* ViewController.swift */,
 				245A5FD52102E22D008FA7D2 /* Main.storyboard */,
+				2437FE6E2109527F00620321 /* level1.txt */,
 				245A5FD82102E22E008FA7D2 /* Assets.xcassets */,
 				245A5FDA2102E22E008FA7D2 /* LaunchScreen.storyboard */,
 				245A5FDD2102E22E008FA7D2 /* Info.plist */,
@@ -123,6 +126,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				245A5FDC2102E22E008FA7D2 /* LaunchScreen.storyboard in Resources */,
+				2437FE6F2109527F00620321 /* level1.txt in Resources */,
 				245A5FD92102E22E008FA7D2 /* Assets.xcassets in Resources */,
 				245A5FD72102E22D008FA7D2 /* Main.storyboard in Resources */,
 			);
