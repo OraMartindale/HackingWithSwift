@@ -18,6 +18,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
     }
+    var ballOptions: [String] = [
+        "ballRed",
+        "ballGreen",
+        "ballBlue",
+        "ballCyan",
+        "ballYellow",
+        "ballGrey",
+        "ballPurple"
+    ]
 
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "background.jpg")
@@ -103,7 +112,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             let location = touch.location(in: self)
-            
             let objects = nodes(at: location)
             
             if objects.contains(editLabel) {
@@ -119,11 +127,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 addChild(box)
             } else {
-                let ball = SKSpriteNode(imageNamed: "ballRed")
+                let ballLocation = CGPoint(x: touch.location(in: self).x, y: 700)
+                let ball = SKSpriteNode(imageNamed: ballOptions[Int.random(in: 0...ballOptions.count-1)])
                 ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
                 ball.physicsBody!.contactTestBitMask = ball.physicsBody!.collisionBitMask
                 ball.physicsBody?.restitution = 0.4
-                ball.position = location
+                ball.position = ballLocation
                 ball.name = "ball"
                 addChild(ball)
             }
