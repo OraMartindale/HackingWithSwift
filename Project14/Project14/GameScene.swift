@@ -16,11 +16,16 @@ class GameScene: SKScene {
             gameScore.text = "Score \(score)"
         }
     }
+    var popupTime = 0.85
 
     override func didMove(to view: SKView) {
         addBackground()
         addGameScore()
         addSlots()
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            self?.createEnemy()
+        }
     }
     
     func addBackground() {
@@ -52,6 +57,26 @@ class GameScene: SKScene {
         slot.configure(at: position)
         addChild(slot)
         slots.append(slot)
+    }
+
+    func createEnemy() {
+        popupTime *= 0.99
+
+        slots.shuffle()
+        slots[0].show(hideTime: popupTime)
+
+        if Int.random(in: 0...12) > 4 { slots[1].show(hideTime: popupTime) }
+        if Int.random(in: 0...12) > 8 { slots[1].show(hideTime: popupTime) }
+        if Int.random(in: 0...12) > 10 { slots[1].show(hideTime: popupTime) }
+        if Int.random(in: 0...12) > 12 { slots[1].show(hideTime: popupTime) }
+
+        let minDelay = popupTime / 2.0
+        let maxDelay = popupTime * 2
+        let delay = Double.random(in: minDelay...maxDelay)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            self?.createEnemy()
+        }
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
