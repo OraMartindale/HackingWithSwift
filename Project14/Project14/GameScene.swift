@@ -17,6 +17,7 @@ class GameScene: SKScene {
         }
     }
     var popupTime = 0.85
+    var numRounds = 0
 
     override func didMove(to view: SKView) {
         addBackground()
@@ -62,6 +63,20 @@ class GameScene: SKScene {
     func createEnemy() {
         popupTime *= 0.99
 
+        numRounds += 1
+        if numRounds >= 30 {
+            for slot in slots {
+                slot.hide()
+            }
+
+            let gameOver = SKSpriteNode(imageNamed: "gameOver")
+            gameOver.position = CGPoint(x: 512, y: 384)
+            gameOver.zPosition = 1
+            addChild(gameOver)
+
+            return
+        }
+
         slots.shuffle()
         slots[0].show(hideTime: popupTime)
 
@@ -80,6 +95,33 @@ class GameScene: SKScene {
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let tappedNodes = nodes(at: location)
+
+        for node in tappedNodes {
+            if node.name == "charFriend" || node.name == "charEnemy" {
+                guard let whackSlot = node.parent?.parent as? WhackSlot else { continue }
+                if !whackSlot.isVisible { continue }
+                if whackSlot.isHit { continue }
+
+                let scoreChange: Int
+                let soundFileName: String
+                if node.name == "charFriend" {
+                    scoreChange = 1
+                    soundFileName = "whack.caf"
+                } else {
+                    scoreChange = -5
+                    soundFileName = "whackBad.caf"
+                }
+
+                whackSlot.charNode.xScale = 0.85
+                whackSlot.charNode.yScale = 0.85
+
+                whackSlot.hit()
+                score += scoreChange
+                run(SKAction.playSoundFileNamed(soundFileName, waitForCompletion: false))
+            }
+        }
     }
 }
