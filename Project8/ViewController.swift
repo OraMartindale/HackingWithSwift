@@ -46,7 +46,9 @@ class ViewController: UIViewController {
         currentAnswer.text = ""
         
         for btn in activatedButtons {
-            btn.isHidden = false
+            UIView.animate(withDuration: 0.25, delay: 0, options: [], animations: {
+                btn.alpha = 1
+            })
         }
         activatedButtons.removeAll()
     }
@@ -66,7 +68,9 @@ class ViewController: UIViewController {
     @objc func letterTapped(btn: UIButton) {
         currentAnswer.text = currentAnswer.text! + btn.titleLabel!.text!
         activatedButtons.append(btn)
-        btn.isHidden = true
+        UIView.animate(withDuration: 0.25, delay: 0, options: [], animations: {
+            btn.alpha = 0
+        })
     }
 
     func loadLevel() {
